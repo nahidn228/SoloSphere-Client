@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-
+import { format } from "date-fns";
 import { Link } from "react-router-dom";
 
 const JobCard = ({ job }) => {
@@ -21,7 +21,7 @@ const JobCard = ({ job }) => {
     >
       <div className="flex items-center justify-between">
         <span className="text-xs font-light text-gray-800 ">
-          Deadline: {deadline}
+          Deadline: {format(new Date(deadline), "P")}
         </span>
         <span className="px-3 py-1 text-[8px] text-blue-800 uppercase bg-blue-200 rounded-full ">
           {category}

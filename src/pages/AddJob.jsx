@@ -44,7 +44,7 @@ const AddJob = () => {
         formData
       );
       console.log(data);
-      
+      form.reset();
       toast.success("Data Added Successfully!!!");
       navigate("/my-posted-jobs");
     } catch (err) {
