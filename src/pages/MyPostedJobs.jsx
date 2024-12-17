@@ -44,6 +44,36 @@ const MyPostedJobs = () => {
       toast.error(err.message);
     }
   };
+
+  const modernDelete = (id) => {
+    toast((t) => (
+      <div className="flex gap-2 justify-center items-center">
+        <div>
+          <p>
+            Are you <b>sure?</b>
+          </p>
+        </div>
+        <div className="flex gap-2">
+          <button
+            className="btn btn-sm bg-red-500"
+            onClick={() => {
+              handleDelete(id);
+              toast.dismiss(t.id);
+            }}
+          >
+            Yes
+          </button>
+          <button
+            className="btn btn-sm bg-green-400"
+            onClick={() => toast.dismiss(t.id)}
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ));
+  };
+
   return (
     <section className="container px-4 mx-auto pt-12">
       <div className="flex items-center gap-x-3">
@@ -135,7 +165,7 @@ const MyPostedJobs = () => {
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
                         <div className="flex items-center gap-x-6">
                           <button
-                            onClick={() => handleDelete(job._id)}
+                            onClick={() => modernDelete(job._id)}
                             className="text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none"
                           >
                             <svg
