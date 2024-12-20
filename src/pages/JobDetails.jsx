@@ -2,7 +2,7 @@ import axios from "axios";
 import { compareAsc, format } from "date-fns";
 import { useContext, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -10,6 +10,7 @@ import { AuthContext } from "../providers/AuthProvider";
 
 const JobDetails = () => {
   const { user } = useContext(AuthContext);
+  const navigate = useNavigate();
   const { id } = useParams();
   const [startDate, setStartDate] = useState(new Date());
 
@@ -35,16 +36,16 @@ const JobDetails = () => {
     min_price,
     max_price,
     description,
-    bid_count,
   } = job || {};
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const form = e.target;
     const price = form.price.value;
     const email = form.email.value;
     const comment = form.comment.value;
     const date = startDate;
+    const jobId = _id;
 
     //check bid permission validation
     if (user?.email === buyer?.email)
@@ -64,8 +65,23 @@ const JobDetails = () => {
     if (price > max_price)
       return toast.error("Offer less or at lest equal to  maximum price!");
 
-    const bidData = { price, email, comment, date };
+    const bidData = { price, email, comment, date, jobId };
     console.table(bidData);
+
+    try {
+      //make a post request
+      const { data } = await axios.post(
+        `${import.meta.env.VITE_API_URL}/add-bid`,
+        bidData
+      );
+      console.log(data);
+      form.reset();
+      toast.success("You are bidding Successfully!!!");
+      // navigate("/my-bids");
+    } catch (err) {
+      console.log(err);
+      toast.error(err?.response?.data);
+    }
   };
 
   return (
