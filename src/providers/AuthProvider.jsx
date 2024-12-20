@@ -67,9 +67,9 @@ const AuthProvider = ({ children }) => {
           .then((res) => console.log("login token", res.data));
       } else {
         setUser(currentUser);
-        // axios.get("http://localhost:5000/logout", {
-        //   withCredentials: true,
-        // });
+        axios.get("http://localhost:5000/logout", {
+          withCredentials: true,
+        });
       }
     });
     return () => {
