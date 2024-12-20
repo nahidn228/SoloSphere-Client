@@ -61,6 +61,7 @@ const JobDetails = () => {
     if (compareDate1 === 1)
       return toast.error("Deadline crossed, Bidding error");
 
+    console.table({ price, max_price });
     // maximum price validation
     if (price > max_price)
       return toast.error("Offer less or at lest equal to  maximum price!");
@@ -74,6 +75,7 @@ const JobDetails = () => {
       title,
       category,
       status: "Pending",
+      buyer: buyer?.email,
     };
     console.table(bidData);
 
