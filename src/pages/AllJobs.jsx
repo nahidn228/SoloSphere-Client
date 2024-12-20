@@ -5,20 +5,21 @@ import JobCard from "../components/JobCard";
 
 const AllJobs = () => {
   const [jobs, setJobs] = useState([]);
+  const [filter, setFilter] = useState("");
   useEffect(() => {
+    const fetchAllJobs = async () => {
+      //make a get request
+      // const { data } = await axios.get(
+      //   `${import.meta.env.VITE_API_URL}/all-jobs?filter=${filter}`
+      // );
+      setJobs(data);
+    };
     //make a post request
     fetchAllJobs();
-  }, []);
+  }, [filter]);
 
-  const fetchAllJobs = async () => {
-    //make a get request
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/all-jobs`
-    );
-    setJobs(data);
-  };
+  console.log(filter);
 
-  
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
       <div>
@@ -28,6 +29,7 @@ const AllJobs = () => {
               name="category"
               id="category"
               className="border p-4 rounded-lg"
+              onChange={(e) => setFilter(e.target.value)}
             >
               <option value="">Filter By Category</option>
               <option value="Web Development">Web Development</option>

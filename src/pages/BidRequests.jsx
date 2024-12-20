@@ -1,6 +1,7 @@
 import axios from "axios";
 import { format } from "date-fns";
 import { useContext, useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { AuthContext } from "../providers/AuthProvider";
 
 const BidRequests = () => {
@@ -20,7 +21,26 @@ const BidRequests = () => {
 
     setBids(data);
   };
-  console.log(bids);
+  const handleStatusChange = async (id, prevStatus, status) => {
+    if (prevStatus === status || prevStatus === "Completed")
+      return console.log("Not Allowed");
+
+    try {
+      const { data } = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/update-bidStatus/${id}`,
+        { status }
+      );
+      console.log(data);
+      toast.success(`Status change to ${status}`);
+      //refresh UI
+      fetchAllBids();
+    } catch (err) {
+      console.error(err);
+      toast.error(err.message);
+    }
+
+    console.table({ id, prevStatus, status });
+  };
   return (
     <section className="container px-4 mx-auto my-12">
       <div className="flex items-center gap-x-3">
@@ -127,12 +147,32 @@ const BidRequests = () => {
                       </td>
                       <td className="px-4 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">
                         <div
-                          className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2 bg-yellow-100/60 text-yellow-500`}
+                          className={`inline-flex items-center px-3 py-1 rounded-full gap-x-2  ${
+                            bid.status === "Pending" &&
+                            "bg-yellow-100/60 text-yellow-500"
+                          } ${
+                            bid.status === "In Progress" &&
+                            "bg-blue-100/60 text-blue-500"
+                          } ${
+                            bid.status === "Completed" &&
+                            "bg-green-100/60 text-green-500"
+                          } ${
+                            bid.status === "Rejected" &&
+                            "bg-red-100/60 text-red-500"
+                          } `}
                         >
                           <span
-                            className={`h-1.5 w-1.5 rounded-full bg-yellow-500 `}
+                            className={`h-1.5 w-1.5 rounded-full ${
+                              bid.status === "Pending" && "bg-yellow-500"
+                            } ${
+                              bid.status === "In Progress" && "bg-blue-500"
+                            } ${bid.status === "Completed" && "bg-green-500"} ${
+                              bid.status === "Rejected" && "bg-red-500"
+                            }  `}
                           ></span>
-                          <h2 className="text-sm font-normal ">{bid.status}</h2>
+                          <h2 className={`text-sm font-normal `}>
+                            {bid.status}
+                          </h2>
                         </div>
                       </td>
                       <td className="px-4 py-4 text-sm whitespace-nowrap">
@@ -140,10 +180,15 @@ const BidRequests = () => {
                           {/* Accept Button */}
                           <button
                             disabled={
-                              status === "In Progress" || status === "Completed"
+                              bid.status === "In Progress" ||
+                              bid.status === "Completed"
                             }
                             onClick={() =>
-                              handleStatusChange(_id, status, "In Progress")
+                              handleStatusChange(
+                                bid._id,
+                                bid.status,
+                                "In Progress"
+                              )
                             }
                             className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-red-500 focus:outline-none"
                           >
@@ -166,10 +211,15 @@ const BidRequests = () => {
                           {/* Reject Button */}
                           <button
                             disabled={
-                              status === "Rejected" || status === "Completed"
+                              bid.status === "Rejected" ||
+                              bid.status === "Completed"
                             }
                             onClick={() =>
-                              handleStatusChange(_id, status, "Rejected")
+                              handleStatusChange(
+                                bid._id,
+                                bid.status,
+                                "Rejected"
+                              )
                             }
                             className="disabled:cursor-not-allowed text-gray-500 transition-colors duration-200   hover:text-yellow-500 focus:outline-none"
                           >
