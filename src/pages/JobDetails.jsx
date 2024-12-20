@@ -65,7 +65,16 @@ const JobDetails = () => {
     if (price > max_price)
       return toast.error("Offer less or at lest equal to  maximum price!");
 
-    const bidData = { price, email, comment, date, jobId };
+    const bidData = {
+      price,
+      email,
+      comment,
+      date,
+      jobId,
+      title,
+      category,
+      status: "Pending",
+    };
     console.table(bidData);
 
     try {
@@ -77,7 +86,7 @@ const JobDetails = () => {
       console.log(data);
       form.reset();
       toast.success("You are bidding Successfully!!!");
-      // navigate("/my-bids");
+      navigate("/my-bids");
     } catch (err) {
       console.log(err);
       toast.error(err?.response?.data);
