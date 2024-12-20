@@ -2,9 +2,11 @@ import axios from "axios";
 import { format } from "date-fns";
 import { useContext, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 import { AuthContext } from "../providers/AuthProvider";
 
 const BidRequests = () => {
+  const axiosSecure = useAxiosSecure();
   const { user } = useContext(AuthContext);
   const [bids, setBids] = useState([]);
   useEffect(() => {
@@ -15,9 +17,7 @@ const BidRequests = () => {
 
   const fetchAllBids = async () => {
     //make a get request
-    const { data } = await axios.get(
-      `${import.meta.env.VITE_API_URL}/bid-request/${user?.email}`
-    );
+    const { data } = await axiosSecure.get(`/bid-request/${user?.email}`);
 
     setBids(data);
   };
