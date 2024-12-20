@@ -7,19 +7,20 @@ const AllJobs = () => {
   const [jobs, setJobs] = useState([]);
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("");
   useEffect(() => {
     const fetchAllJobs = async () => {
       //make a get request
       const { data } = await axios.get(
         `${
           import.meta.env.VITE_API_URL
-        }/all-jobs?filter=${filter}&search=${search}`
+        }/all-jobs?filter=${filter}&search=${search}&sort=${sort}`
       );
       setJobs(data);
     };
     //make a post request
     fetchAllJobs();
-  }, [filter, search]);
+  }, [filter, search, sort]);
 
   return (
     <div className="container px-6 py-10 mx-auto min-h-[calc(100vh-306px)] flex flex-col justify-between">
@@ -45,8 +46,8 @@ const AllJobs = () => {
                 className="px-6 py-2 text-gray-700 placeholder-gray-500 bg-white outline-none focus:placeholder-transparent"
                 type="text"
                 name="search"
-                // onChange={(e) => setSearch(e.target.value)}
-                onBlur={(e) => setSearch(e.target.value)}
+                onChange={(e) => setSearch(e.target.value)}
+                // onBlur={(e) => setSearch(e.target.value)}
                 placeholder="Enter Job Title"
                 aria-label="Enter Job Title"
               />
@@ -61,8 +62,9 @@ const AllJobs = () => {
           </form>
           <div>
             <select
-              name="category"
-              id="category"
+              name="sort"
+              id="sort"
+              onChange={(e) => setSort(e.target.value)}
               className="border p-4 rounded-md"
             >
               <option value="">Sort By Deadline</option>
