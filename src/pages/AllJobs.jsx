@@ -9,9 +9,9 @@ const AllJobs = () => {
   useEffect(() => {
     const fetchAllJobs = async () => {
       //make a get request
-      // const { data } = await axios.get(
-      //   `${import.meta.env.VITE_API_URL}/all-jobs?filter=${filter}`
-      // );
+      const { data } = await axios.get(
+        `${import.meta.env.VITE_API_URL}/all-jobs?filter=${filter}`
+      );
       setJobs(data);
     };
     //make a post request
